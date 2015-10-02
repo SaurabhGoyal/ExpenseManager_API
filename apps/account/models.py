@@ -1,5 +1,4 @@
 from django.db import models
-from django.core.validators import RegexValidator
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import ugettext as _
 
@@ -37,6 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     objects = UserManager()
     USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['first_name']
 
     def get_full_name(self):
         return "{0} {1}".format(self.first_name, self.last_name)
@@ -45,6 +45,4 @@ class User(AbstractBaseUser, PermissionsMixin):
         return self.first_name
 
     def __unicode__(self):
-        if self.is_admin:
-            return _("{0} (Admin)".format(self.email))
-        return _("{0} (User)".format(self.email))
+        return _('{0}({1})'.format(self.get_full_name(), self.email))
