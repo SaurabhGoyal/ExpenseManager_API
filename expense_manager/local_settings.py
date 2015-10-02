@@ -38,6 +38,6 @@ DATABASES = {
 #
 # NOSE_ARGS = [
 # '--with-coverage',
-#     '--cover-package=apps.user, apps.inventory'
+#     '--cover-package=apps.account, apps.inventory'
 # ]
 

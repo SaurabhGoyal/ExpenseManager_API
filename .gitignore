@@ -13,3 +13,5 @@
 
 .idea
 .htaccess
+
+expense_manager/local_settings.py

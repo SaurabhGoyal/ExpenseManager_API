@@ -8,7 +8,7 @@ from os.path import abspath, basename, dirname, join, normpath
 BASE_DIR = dirname(abspath(__file__))
 # END PATH CONFIGURATION
 
-# AUTH_USER_MODEL = 'user.User'
+AUTH_USER_MODEL = 'account.User'
 DJANGO_SETTINGS_MODULE = "expense_manager.settings"
 
 # MANAGER CONFIGURATION
@@ -184,6 +184,7 @@ THIRD_PARTY_APPS = (
 
 LOCAL_APPS = (
     'libs',  # To make template tags work
+    'apps.account',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
