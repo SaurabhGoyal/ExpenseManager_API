@@ -7,7 +7,7 @@ admin.autodiscover()
 # See: https://docs.djangoproject.com/en/dev/topics/http/urls/
 urlpatterns = patterns('',
 
-                       # url(r'^', include('apps.account.urls', namespace="account")),
+                       url(r'^', include('apps.account.urls', namespace="account")),
                        url(r'^admin/', include(admin.site.urls)),
 
 )

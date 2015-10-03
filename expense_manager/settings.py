@@ -11,6 +11,10 @@ BASE_DIR = dirname(abspath(__file__))
 AUTH_USER_MODEL = 'account.User'
 DJANGO_SETTINGS_MODULE = "expense_manager.settings"
 
+# WEB SETTINGS #
+WEB_SESSION_EXPIRY = 1 * 60 * 60   # 1 hours
+# END WEB SETTINGS #
+
 # MANAGER CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#admins
 ADMINS = (
@@ -192,6 +196,22 @@ LOCAL_APPS = (
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 # END APP CONFIGURATION
+
+# Django REST Framework Settings #
+REST_FRAMEWORK = {
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'apps.account.authentication.ExpiringTokenAuthentication',
+    ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.DjangoFilterBackend',
+    ),
+}
+# END Django REST Framework Settings #
 
 # CACHE CONFIGURATION
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#caches

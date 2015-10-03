@@ -1,6 +1,12 @@
+import datetime
+from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import ugettext as _
+
+from rest_framework.authtoken.models import Token
 
 
 class UserManager(BaseUserManager):
@@ -46,3 +52,46 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def __unicode__(self):
         return _('{0}({1})'.format(self.get_full_name(), self.email))
+
+
+class TokenManager(models.Manager):
+    """
+    Overrides to always provide a pre-fetched related 'user' for ExpiringToken.
+    """
+    def get_queryset(self):
+        return super(TokenManager, self).get_queryset().select_related('user')
+
+
+class ExpiringToken(Token):
+    """
+    Token that expires after a set time. Overrides Token from rest_framework to add validation using expiry time.
+    """
+    expiry_time = models.DateTimeField(default=datetime.datetime.now)
+
+    objects = TokenManager()
+
+    def __unicode__(self):
+        return self.key
+
+    def is_valid_token(self):
+        return datetime.datetime.now() < self.expiry_time
+
+    def invalidate_token(self):
+        self.expiry_time = datetime.datetime.now()
+        self.save()
+
+    def validate_token(self):
+        self.expiry_time = datetime.datetime.now() + datetime.timedelta(seconds=settings.WEB_SESSION_EXPIRY)
+        self.save()
+
+    def restore_token_life(self):
+        new_expiry_time = datetime.datetime.now() + datetime.timedelta(seconds=settings.WEB_SESSION_EXPIRY)
+        if self.expiry_time < new_expiry_time:
+            self.expiry_time = new_expiry_time
+            self.save()
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        ExpiringToken.objects.create(user=instance)
