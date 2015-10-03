@@ -186,6 +186,7 @@ LOCAL_APPS = (
     'libs',  # To make template tags work
     'apps.account',
     'apps.activity',
+    'apps.expense',
 )
 
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
