@@ -1,13 +1,17 @@
-from rest_framework.authtoken import views
-from rest_framework.response import Response
+from rest_framework.authtoken import views as authtoken_views
+from rest_framework import (
+    generics as rest_generics,
+    response as rest_response,
+)
 
 from apps.account import (
+    mixins as account_mixins,
     models as account_models,
     serializers as account_serializers,
 )
 
 
-class LoginView(views.ObtainAuthToken):
+class LoginView(account_mixins.AnonymousOnlyMixin, authtoken_views.ObtainAuthToken):
     """
     Overrides to validate token after creation.
     """
@@ -24,4 +28,12 @@ class LoginView(views.ObtainAuthToken):
         token.validate_token()
 
         # Return data of validated token
-        return Response(account_serializers.ExpiringTokenSerializer(token).data)
+        return rest_response.Response(account_serializers.ExpiringTokenSerializer(token).data)
+
+
+class RegistrationView(account_mixins.AnonymousOnlyMixin, rest_generics.CreateAPIView):
+    """
+    Overrides to validate token after creation.
+    """
+    http_method_names = ['post']
+    serializer_class = account_serializers.UserSerializer
