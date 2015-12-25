@@ -106,4 +106,3 @@ def create_auth_token(sender, instance=None, created=False, **kwargs):
     """
     if created:
         ExpiringToken.objects.create(user=instance)
-        

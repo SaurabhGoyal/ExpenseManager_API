@@ -8,7 +8,7 @@ from apps.account import permissions as account_permissions
 
 class AnonymousOnlyMixin(object):
     """
-    A mixin to ensure a view is accessible only by anonymous users.
+    Mixin to ensure a view is accessible only by anonymous users.
     """
 
     authentication_classes = []
