@@ -5,4 +5,5 @@ from apps.account import views as account_views
 urlpatterns = patterns(
     '',
     url(r'^login/$', account_views.LoginView.as_view(), name='login'),
+    url(r'^register/$', account_views.RegistrationView.as_view(), name='register'),
 )
