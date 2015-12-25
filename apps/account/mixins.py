@@ -1,8 +1,3 @@
-from rest_framework import (
-    response as rest_response,
-    status as rest_status,
-)
-
 from apps.account import permissions as account_permissions
 
 
