@@ -11,7 +11,9 @@ from rest_framework.authtoken.models import Token
 
 
 class UserManager(BaseUserManager):
-    """ Extending to override account creation feature with email instead of username"""
+    """
+    Provides account creation feature using email instead of username.
+    """
 
     def create_user(self, email, password, **kwargs):
         if not email:
@@ -31,7 +33,9 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    """ Extending to use email as the USERNAME field """
+    """
+    Uses email as the USERNAME field
+    """
 
     email = models.EmailField(unique=True)
     first_name = models.CharField(max_length=20)
@@ -57,9 +61,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class TokenManager(models.Manager):
     """
-    Overrides to always provide a pre-fetched related 'user' for ExpiringToken.
+    Manager for ExpiringToken.
     """
     def get_queryset(self):
+        """
+        Provides a pre-fetched related 'user' for ExpiringToken.
+        """
         return super(TokenManager, self).get_queryset().select_related('user')
 
 
@@ -94,5 +101,9 @@ class ExpiringToken(Token):
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def create_auth_token(sender, instance=None, created=False, **kwargs):
+    """
+    Creates an object of ExpiringToken for newly created users.
+    """
     if created:
         ExpiringToken.objects.create(user=instance)
+        

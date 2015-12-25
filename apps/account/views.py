@@ -13,11 +13,14 @@ from apps.account import (
 
 class LoginView(account_mixins.AnonymousOnlyMixin, authtoken_views.ObtainAuthToken):
     """
-    Overrides to validate token after creation.
+    API to login an existing user.
     """
     http_method_names = ['post']
 
     def post(self, request):
+        """
+        Overrides to validate token after creation.
+        """
 
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -33,7 +36,7 @@ class LoginView(account_mixins.AnonymousOnlyMixin, authtoken_views.ObtainAuthTok
 
 class RegistrationView(account_mixins.AnonymousOnlyMixin, rest_generics.CreateAPIView):
     """
-    Overrides to validate token after creation.
+    API to register a new user.
     """
     http_method_names = ['post']
     serializer_class = account_serializers.UserSerializer
