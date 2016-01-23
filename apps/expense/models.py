@@ -9,14 +9,14 @@ class ExpenseCategory(libs_models.DatesModel):
     """
     Stores static info of expense category
     """
-    name = db_models.CharField(max_length=255)
+    name = db_models.CharField(max_length=255, unique=True)
     description = db_models.TextField()
 
     def __unicode__(self):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Expense Categories'
+        verbose_name_plural = u'Expense Categories'
 
 
 class Expense(libs_models.DatesModel):
@@ -28,7 +28,7 @@ class Expense(libs_models.DatesModel):
     activity = db_models.ForeignKey(activity_models.Activity)
 
     def __unicode__(self):
-        return '{}({})'.format(self.name, self.activity.name)
+        return u'{}({})'.format(self.name, self.activity.name)
 
 
 class UserExpense(libs_models.DatesModel):
@@ -41,4 +41,4 @@ class UserExpense(libs_models.DatesModel):
     dues = db_models.DecimalField(max_digits=15, decimal_places=2)
 
     def __unicode__(self):
-        return '{}({})'.format(self.expense, self.dues)
+        return u'{}({})'.format(self.expense, self.dues)
